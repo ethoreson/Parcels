@@ -1,5 +1,5 @@
 import java.io.Console;
-import java.util.Array;
+import java.util.List;
 import java.util.ArrayList;
 
 public class App {
@@ -10,7 +10,7 @@ public class App {
     boolean programRunning = true;
 
     while (programRunning) {
-      System.out.println("~~~~~~~~~~~~~~~~~");
+      System.out.println("~~~~~~~~~~~~~~~~~~");
       System.out.println("This is Emilie's Parcel Shipment Service. Would you like to 'Add a Parcel', 'View Shopping Cart', or 'Ship Order':");
       String navigationChoice = myConsole.readLine();
 
@@ -29,31 +29,40 @@ public class App {
 
         Parcel userParcel = new Parcel(userSendTo, userLength, userWidth, userHeight, userWeight);
         allParcels.add(userParcel);
-        int parcelTotal = 0;
         int volumeTotal = userParcel.calculateVolume(userLength, userWidth, userHeight);
         int initialTotal = userParcel.costToShip(volumeTotal, userWeight);
-        parcelTotal += initialTotal;
-
+        userParcel.mTotalCost += initialTotal;
         System.out.println("Would you like to pay for 2-day shipping? Only $6! Yes or No:");
         String twoDayYesOrNo = myConsole.readLine();
-        if twoDayYesOrNo.equals("Yes") {
-          parcelTotal += 6;
+        if (twoDayYesOrNo.equals("Yes")) {
+          userParcel.mTotalCost += 6;
         }
 
         System.out.println("Would you like the parcel gift-wrapped? Only $2! Yes or No:");
         String giftWrappedYesOrNo = myConsole.readLine();
-        if giftWrappedYesOrNo.equals("Yes") {
-          parcelTotal += 2;
+        if (giftWrappedYesOrNo.equals("Yes")) {
+          userParcel.mTotalCost += 2;
         }
-
-
+        System.out.println("----------------");
+        System.out.println("Thank you! You can view your order in 'View Shopping Cart'");
 
       } else if ((navigationChoice.equals("View Shopping Cart")) && !allParcels.isEmpty()) {
         for (Parcel eachParcel : allParcels ) {
           System.out.println("------------");
-          System.out.println("Package being sent to" + eachParcel.mName );
-          System.out.println("Total Cost:" + )
+          System.out.println("Package being sent to " + eachParcel.mName );
+          System.out.println("Total Cost: $" + eachParcel.mTotalCost);
         }
+      } else if ((navigationChoice.equals("Ship Order")) && !allParcels.isEmpty()) {
+        System.out.println("Thank you for choosing Emilie's Parcel Shipment Service!");
+        System.out.println("Your parcels have been shipped. Your total is:");
+        int addTheCosts = 0;
+        for (Parcel eachParcel : allParcels ) {
+          addTheCosts += eachParcel.mTotalCost;
+        }
+        System.out.println("$" + addTheCosts);
+        allParcels.clear();
+      } else {
+        System.out.println("You can't View Shopping Cart of Ship Packages if you haven't submitted a parcel! Please check spelling.");
       }
     }
   }
